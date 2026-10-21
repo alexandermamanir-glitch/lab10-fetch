@@ -1,0 +1,42 @@
+console.log("Laboratorio 10 listo");
+
+fetch("https://jsonplaceholder.typicode.com/users/1")
+  .then(res => res.json())
+  .then(usuario => console.log("Usuario 1:", usuario.name))
+  .catch(error => console.log("Ocurrió un error:", error));
+
+async function cargarUsuario() {
+    const res = await fetch("https://jsonplaceholder.typicode.com/users/2");
+    const usuario = await res.json();
+    console.log("Usuario 2:", usuario.name);
+  }
+  
+  cargarUsuario();
+
+async function probarError() {
+  try {
+    const res = await fetch("https://jsonplaceholder.typicode.com/users");
+    if (!res.ok) throw new Error("No se encontró la información");
+    const datos = await res.json();
+    console.log("Datos recibidos:", datos);
+  } catch (error) {
+    console.log("Ocurrió un error:", error.message);
+  }
+}
+
+probarError();
+
+async function mostrarUsuarios() {
+  const lista = document.querySelector("#lista");
+  try {
+    const res = await fetch("https://jsonplaceholder.typicode.com/users");
+    const usuarios = await res.json();
+    lista.innerHTML = usuarios
+      .map(u => `<li>${u.name} - ${u.email}</li>`)
+      .join("");
+  } catch (error) {
+    lista.innerHTML = "<li>No se pudo cargar la información</li>";
+  }
+}
+
+mostrarUsuarios();
